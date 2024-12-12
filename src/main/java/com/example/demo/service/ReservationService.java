@@ -9,12 +9,17 @@ import com.example.demo.exception.ReservationConflictException;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.ReservationRepository;
 import com.example.demo.repository.UserRepository;
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
+import static com.example.demo.entity.QReservation.reservation;
 
 
 @Service
@@ -23,15 +28,17 @@ public class ReservationService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final RentalLogService rentalLogService;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public ReservationService(ReservationRepository reservationRepository,
                               ItemRepository itemRepository,
                               UserRepository userRepository,
-                              RentalLogService rentalLogService) {
+                              RentalLogService rentalLogService, JPAQueryFactory jpaQueryFactory) {
         this.reservationRepository = reservationRepository;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.rentalLogService = rentalLogService;
+        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     // TODO: 1. 트랜잭션 이해
@@ -39,7 +46,7 @@ public class ReservationService {
     public void createReservation(Long itemId, Long userId, LocalDateTime startAt, LocalDateTime endAt) {
         // 쉽게 데이터를 생성하려면 아래 유효성검사 주석 처리
         List<Reservation> haveReservations = reservationRepository.findConflictingReservations(itemId, startAt, endAt);
-        if(!haveReservations.isEmpty()) {
+        if (!haveReservations.isEmpty()) {
             throw new ReservationConflictException("해당 물건은 이미 그 시간에 예약이 있습니다.");
         }
 
@@ -79,16 +86,33 @@ public class ReservationService {
     }
 
     public List<Reservation> searchReservations(Long userId, Long itemId) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        if (userId != null && itemId != null) {
-            return reservationRepository.findByUserIdAndItemId(userId, itemId);
-        } else if (userId != null) {
-            return reservationRepository.findByUserId(userId);
-        } else if (itemId != null) {
-            return reservationRepository.findByItemId(itemId);
-        } else {
-            return reservationRepository.findAll();
+        JPAQuery<Reservation> query = jpaQueryFactory.select(reservation)
+                .from(reservation)
+                .leftJoin(reservation.user).fetchJoin()
+                .leftJoin(reservation.item).fetchJoin();
+
+        if (userId != null) {
+            booleanBuilder.and(reservation.user.id.eq(userId));
         }
+        if (itemId != null) {
+            booleanBuilder.and(reservation.item.id.eq(itemId));
+        }
+
+        return query
+                .where(booleanBuilder)
+                .fetch();
+//
+//        if (userId != null && itemId != null) {
+//            return reservationRepository.findByUserIdAndItemId(userId, itemId);
+//        } else if (userId != null) {
+//            return reservationRepository.findByUserId(userId);
+//        } else if (itemId != null) {
+//            return reservationRepository.findByItemId(itemId);
+//        } else {
+//            return reservationRepository.findAll();
+//        }
     }
 
     private List<ReservationResponseDto> convertToDto(List<Reservation> reservations) {
