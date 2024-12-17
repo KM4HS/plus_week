@@ -39,5 +39,6 @@ class ItemTest {
 
         // Then
         assertThat(findItem.getStatus()).isNotNull();
+        assertThat(findItem.getStatus()).isEqualTo("PENDING");
     }
 }
