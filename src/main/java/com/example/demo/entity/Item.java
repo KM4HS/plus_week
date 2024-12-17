@@ -18,11 +18,11 @@ public class Item {
 
     private String description;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
     private User owner;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_id")
     private User manager;
 
@@ -36,5 +36,6 @@ public class Item {
         this.owner = owner;
     }
 
-    public Item() {}
+    public Item() {
+    }
 }
