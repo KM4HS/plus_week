@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="ko"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ReservationController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">demo</a> &gt; <a href="index.source.html" class="el_package">com.example.demo.controller</a> &gt; <span class="el_source">ReservationController.java</span></div><h1>ReservationController.java</h1><pre class="source lang-java linenums">package com.example.demo.controller;
+
+import com.example.demo.dto.ReservationRequestDto;
+import com.example.demo.dto.ReservationResponseDto;
+import com.example.demo.service.ReservationService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(&quot;/reservations&quot;)
+public class ReservationController {
+    private final ReservationService reservationService;
+
+<span class="fc" id="L17">    public ReservationController(ReservationService reservationService) {</span>
+<span class="fc" id="L18">        this.reservationService = reservationService;</span>
+<span class="fc" id="L19">    }</span>
+
+    @PostMapping
+    public ResponseEntity&lt;String&gt; createReservation(@RequestBody ReservationRequestDto reservationRequestDto) {
+<span class="fc" id="L23">        reservationService.createReservation(reservationRequestDto.getItemId(),</span>
+<span class="fc" id="L24">                                            reservationRequestDto.getUserId(),</span>
+<span class="fc" id="L25">                                            reservationRequestDto.getStartAt(),</span>
+<span class="fc" id="L26">                                            reservationRequestDto.getEndAt());</span>
+<span class="fc" id="L27">        return new ResponseEntity&lt;&gt;(&quot;예약이 생성되었습니다.&quot;, HttpStatus.CREATED);</span>
+    }
+
+    @PatchMapping(&quot;/{id}/update-status&quot;)
+    public ResponseEntity&lt;String&gt; updateReservation(@PathVariable Long id, @RequestBody String status) {
+<span class="fc" id="L32">        reservationService.updateReservationStatus(id, status);</span>
+
+<span class="fc" id="L34">        return ResponseEntity.ok(&quot;상태가 변경되었습니다.&quot;);</span>
+    }
+
+    @GetMapping
+    public ResponseEntity&lt;List&lt;ReservationResponseDto&gt;&gt; findAll() {
+<span class="fc" id="L39">        List&lt;ReservationResponseDto&gt; reservations = reservationService.getReservations();</span>
+<span class="fc" id="L40">        return ResponseEntity.ok(reservations);</span>
+    }
+
+    @GetMapping(&quot;/search&quot;)
+    public ResponseEntity&lt;List&lt;ReservationResponseDto&gt;&gt; searchAll(@RequestParam(required = false) Long userId,
+                          @RequestParam(required = false) Long itemId) {
+<span class="fc" id="L46">        List&lt;ReservationResponseDto&gt; reservationResponseDtos = reservationService.searchAndConvertReservations(userId, itemId);</span>
+
+<span class="fc" id="L48">        return ResponseEntity.ok(reservationResponseDtos);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
