@@ -83,23 +83,7 @@ public class ReservationService {
     }
 
     public List<Reservation> searchReservations(Long userId, Long itemId) {
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-
-        JPAQuery<Reservation> query = jpaQueryFactory.select(reservation)
-                .from(reservation)
-                .leftJoin(reservation.user).fetchJoin()
-                .leftJoin(reservation.item).fetchJoin();
-
-        if (userId != null) {
-            booleanBuilder.and(reservation.user.id.eq(userId));
-        }
-        if (itemId != null) {
-            booleanBuilder.and(reservation.item.id.eq(itemId));
-        }
-
-        return query
-                .where(booleanBuilder)
-                .fetch();
+        return reservationRepository.searchReservations(userId, itemId);
     }
 
     private List<ReservationResponseDto> convertToDto(List<Reservation> reservations) {

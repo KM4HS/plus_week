@@ -72,13 +72,4 @@ public class WebConfig implements WebMvcConfigurer {
         filterRegistrationBean.addUrlPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS);
         return filterRegistrationBean;
     }
-
-    // QueryDSL
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Bean
-    public JPAQueryFactory jpaQueryFactory() {
-        return new JPAQueryFactory(entityManager);
-    }
 }
