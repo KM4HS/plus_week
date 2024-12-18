@@ -1,7 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.ItemRequestDto;
+import com.example.demo.dto.ItemResponseDto;
 import com.example.demo.service.ItemService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,10 +20,12 @@ public class ItemController {
     }
 
     @PostMapping
-    public void createItem(@RequestBody ItemRequestDto itemRequestDto) {
-         itemService.createItem(itemRequestDto.getName(),
-                                itemRequestDto.getDescription(),
-                                itemRequestDto.getOwnerId(),
-                                itemRequestDto.getManagerId());
+    public ResponseEntity<ItemResponseDto> createItem(@RequestBody ItemRequestDto itemRequestDto) {
+        ItemResponseDto dto = itemService.createItem(itemRequestDto.getName(),
+                itemRequestDto.getDescription(),
+                itemRequestDto.getOwnerId(),
+                itemRequestDto.getManagerId());
+
+        return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 }
