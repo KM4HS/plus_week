@@ -6,17 +6,12 @@ import com.example.demo.exception.ReservationConflictException;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.ReservationRepository;
 import com.example.demo.repository.UserRepository;
-import com.querydsl.core.BooleanBuilder;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-
-import static com.example.demo.entity.QReservation.reservation;
 
 
 @Service
@@ -25,17 +20,15 @@ public class ReservationService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final RentalLogService rentalLogService;
-    private final JPAQueryFactory jpaQueryFactory;
 
     public ReservationService(ReservationRepository reservationRepository,
                               ItemRepository itemRepository,
                               UserRepository userRepository,
-                              RentalLogService rentalLogService, JPAQueryFactory jpaQueryFactory) {
+                              RentalLogService rentalLogService) {
         this.reservationRepository = reservationRepository;
         this.itemRepository = itemRepository;
         this.userRepository = userRepository;
         this.rentalLogService = rentalLogService;
-        this.jpaQueryFactory = jpaQueryFactory;
     }
 
     // TODO: 1. 트랜잭션 이해
@@ -47,8 +40,8 @@ public class ReservationService {
             throw new ReservationConflictException("해당 물건은 이미 그 시간에 예약이 있습니다.");
         }
 
-        Item item = itemRepository.findById(itemId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 값이 존재하지 않습니다."));
+        Item item = itemRepository.findByIdOrElseThrow(itemId);
+        User user = userRepository.findByIdOrElseThrow(userId);
         Reservation reservation = new Reservation(item, user, "PENDING", startAt, endAt);
         Reservation savedReservation = reservationRepository.save(reservation);
 
@@ -101,7 +94,7 @@ public class ReservationService {
     // TODO: 7. 리팩토링
     @Transactional
     public ReservationResponseDto updateReservationStatus(Long reservationId, String status) {
-        Reservation reservation = reservationRepository.findById(reservationId).orElseThrow(() -> new IllegalArgumentException("해당 ID에 맞는 데이터가 존재하지 않습니다."));
+        Reservation reservation = reservationRepository.findByIdOrElseThrow(reservationId);
 
         Status statusToChange = Arrays.stream(Status.values())
                 .filter(s -> s.name().equals(status))
