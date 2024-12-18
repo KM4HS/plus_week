@@ -9,14 +9,14 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaRepositories(&quot;com.example.demo.repository&quot;)
-<span class="nc" id="L12">public class JpaConfig {</span>
+<span class="fc" id="L12">public class JpaConfig {</span>
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
-<span class="nc" id="L19">        return new JPAQueryFactory(entityManager);</span>
+<span class="fc" id="L19">        return new JPAQueryFactory(entityManager);</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

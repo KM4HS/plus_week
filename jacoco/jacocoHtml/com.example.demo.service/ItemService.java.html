@@ -13,15 +13,15 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
-<span class="nc" id="L16">    public ItemService(ItemRepository itemRepository, UserRepository userRepository) {</span>
-<span class="nc" id="L17">        this.itemRepository = itemRepository;</span>
-<span class="nc" id="L18">        this.userRepository = userRepository;</span>
-<span class="nc" id="L19">    }</span>
+<span class="fc" id="L16">    public ItemService(ItemRepository itemRepository, UserRepository userRepository) {</span>
+<span class="fc" id="L17">        this.itemRepository = itemRepository;</span>
+<span class="fc" id="L18">        this.userRepository = userRepository;</span>
+<span class="fc" id="L19">    }</span>
 
     @Transactional
     public ItemResponseDto createItem(String name, String description, Long ownerId, Long managerId) {
-<span class="nc" id="L23">        User owner = userRepository.findById(ownerId).orElseThrow(() -&gt; new IllegalArgumentException(&quot;해당 ID에 맞는 값이 존재하지 않습니다.&quot;));</span>
-<span class="nc" id="L24">        User manager = userRepository.findById(managerId).orElseThrow(() -&gt; new IllegalArgumentException(&quot;해당 ID에 맞는 값이 존재하지 않습니다.&quot;));</span>
+<span class="nc" id="L23">        User owner = userRepository.findByIdOrElseThrow(ownerId);</span>
+<span class="nc" id="L24">        User manager = userRepository.findByIdOrElseThrow(managerId);</span>
 
 <span class="nc" id="L26">        Item item = new Item(name, description, owner, manager);</span>
 <span class="nc" id="L27">        Item saved = itemRepository.save(item);</span>

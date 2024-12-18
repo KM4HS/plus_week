@@ -33,44 +33,44 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-<span class="nc" id="L36">        registry.addInterceptor(authInterceptor)</span>
-<span class="nc" id="L37">                .addPathPatterns(AUTH_REQUIRED_PATH_PATTERNS)</span>
-<span class="nc" id="L38">                .order(Ordered.HIGHEST_PRECEDENCE);</span>
+<span class="fc" id="L36">        registry.addInterceptor(authInterceptor)</span>
+<span class="fc" id="L37">                .addPathPatterns(AUTH_REQUIRED_PATH_PATTERNS)</span>
+<span class="fc" id="L38">                .order(Ordered.HIGHEST_PRECEDENCE);</span>
 
-<span class="nc" id="L40">        registry.addInterceptor(adminRoleInterceptor)</span>
-<span class="nc" id="L41">                .addPathPatterns(ADMIN_ROLE_REQUIRED_PATH_PATTERNS)</span>
-<span class="nc" id="L42">                .order(Ordered.HIGHEST_PRECEDENCE + 1);</span>
+<span class="fc" id="L40">        registry.addInterceptor(adminRoleInterceptor)</span>
+<span class="fc" id="L41">                .addPathPatterns(ADMIN_ROLE_REQUIRED_PATH_PATTERNS)</span>
+<span class="fc" id="L42">                .order(Ordered.HIGHEST_PRECEDENCE + 1);</span>
 
-<span class="nc" id="L44">        registry.addInterceptor(userRoleInterceptor)</span>
-<span class="nc" id="L45">                .addPathPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS)</span>
-<span class="nc" id="L46">                .order(Ordered.HIGHEST_PRECEDENCE + 2);</span>
-<span class="nc" id="L47">    }</span>
+<span class="fc" id="L44">        registry.addInterceptor(userRoleInterceptor)</span>
+<span class="fc" id="L45">                .addPathPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS)</span>
+<span class="fc" id="L46">                .order(Ordered.HIGHEST_PRECEDENCE + 2);</span>
+<span class="fc" id="L47">    }</span>
 
     @Bean
     public FilterRegistrationBean authFilter() {
-<span class="nc" id="L51">        FilterRegistrationBean&lt;Filter&gt; filterRegistrationBean = new FilterRegistrationBean&lt;&gt;();</span>
-<span class="nc" id="L52">        filterRegistrationBean.setFilter(new AuthFilter());</span>
-<span class="nc" id="L53">        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);</span>
-<span class="nc" id="L54">        filterRegistrationBean.addUrlPatterns(AUTH_REQUIRED_PATH_PATTERNS);</span>
-<span class="nc" id="L55">        return filterRegistrationBean;</span>
+<span class="fc" id="L51">        FilterRegistrationBean&lt;Filter&gt; filterRegistrationBean = new FilterRegistrationBean&lt;&gt;();</span>
+<span class="fc" id="L52">        filterRegistrationBean.setFilter(new AuthFilter());</span>
+<span class="fc" id="L53">        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);</span>
+<span class="fc" id="L54">        filterRegistrationBean.addUrlPatterns(AUTH_REQUIRED_PATH_PATTERNS);</span>
+<span class="fc" id="L55">        return filterRegistrationBean;</span>
     }
 
     @Bean
     public FilterRegistrationBean adminRoleFilter() {
-<span class="nc" id="L60">        FilterRegistrationBean&lt;Filter&gt; filterFilterRegistrationBean = new FilterRegistrationBean&lt;&gt;();</span>
-<span class="nc" id="L61">        filterFilterRegistrationBean.setFilter(new RoleFilter(Role.ADMIN));</span>
-<span class="nc" id="L62">        filterFilterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);</span>
-<span class="nc" id="L63">        filterFilterRegistrationBean.addUrlPatterns(ADMIN_ROLE_REQUIRED_PATH_PATTERNS);</span>
-<span class="nc" id="L64">        return filterFilterRegistrationBean;</span>
+<span class="fc" id="L60">        FilterRegistrationBean&lt;Filter&gt; filterFilterRegistrationBean = new FilterRegistrationBean&lt;&gt;();</span>
+<span class="fc" id="L61">        filterFilterRegistrationBean.setFilter(new RoleFilter(Role.ADMIN));</span>
+<span class="fc" id="L62">        filterFilterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 1);</span>
+<span class="fc" id="L63">        filterFilterRegistrationBean.addUrlPatterns(ADMIN_ROLE_REQUIRED_PATH_PATTERNS);</span>
+<span class="fc" id="L64">        return filterFilterRegistrationBean;</span>
     }
 
     @Bean
     public FilterRegistrationBean userRoleFilter() {
-<span class="nc" id="L69">        FilterRegistrationBean&lt;Filter&gt; filterRegistrationBean = new FilterRegistrationBean&lt;&gt;();</span>
-<span class="nc" id="L70">        filterRegistrationBean.setFilter(new RoleFilter(Role.USER));</span>
-<span class="nc" id="L71">        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 2);</span>
-<span class="nc" id="L72">        filterRegistrationBean.addUrlPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS);</span>
-<span class="nc" id="L73">        return filterRegistrationBean;</span>
+<span class="fc" id="L69">        FilterRegistrationBean&lt;Filter&gt; filterRegistrationBean = new FilterRegistrationBean&lt;&gt;();</span>
+<span class="fc" id="L70">        filterRegistrationBean.setFilter(new RoleFilter(Role.USER));</span>
+<span class="fc" id="L71">        filterRegistrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE + 2);</span>
+<span class="fc" id="L72">        filterRegistrationBean.addUrlPatterns(USER_ROLE_REQUIRED_PATH_PATTERNS);</span>
+<span class="fc" id="L73">        return filterRegistrationBean;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
