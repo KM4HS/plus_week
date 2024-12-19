@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.UserRepository;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,8 +23,8 @@ class ItemTest {
     TestEntityManager testEntityManager;
 
     @Test
-    void testStatusNotNull() {
-
+    @DisplayName("자동 생성값 들어감")
+    void statusNotNull() {
         // Given
         User manager = userRepository.save(new User("admin", "admin@gmail.com", "admin", "Test!1234"));
         User owner = userRepository.save(new User("user", "user@gmail.com", "user", "Test!1234"));
